@@ -22,6 +22,10 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-screen.php';
 	require_once ABSPATH . 'wp-admin/includes/screen.php';
@@ -296,10 +300,10 @@ class TT_OrganizeMediaFolder_List_Table extends WP_List_Table {
 
 		$columns = array(
 			'cb'       => '<input type="checkbox" />', /* Render a checkbox instead of text */
-			'title'    => __( 'Title' ),
+			'title'    => __( 'Title', 'organize-media-folder' ),
 			'folder'   => __( 'Folder', 'organize-media-folder' ),
-			'author'   => __( 'Author' ),
-			'datetime' => __( 'Date/time' ),
+			'author'   => __( 'Author', 'organize-media-folder' ),
+			'datetime' => __( 'Date/time', 'organize-media-folder' ),
 		);
 
 		return $columns;
@@ -372,7 +376,7 @@ class TT_OrganizeMediaFolder_List_Table extends WP_List_Table {
 			<label for="cb-select-all-' . $cb_counter . '">' .
 				'<span class="screen-reader-text">' .
 					/* translators: Hidden accessibility text. */
-					__( 'Select All' ) .
+					__( 'Select All', 'organize-media-folder' ) .
 				'</span>' .
 				'</label>';
 			++$cb_counter;
@@ -444,9 +448,9 @@ class TT_OrganizeMediaFolder_List_Table extends WP_List_Table {
 					$class[] = 'desc' === $order ? 'asc' : 'desc';
 
 					/* translators: Hidden accessibility text. */
-					$asc_text = __( 'Sort ascending.' );
+					$asc_text = __( 'Sort ascending.', 'organize-media-folder' );
 					/* translators: Hidden accessibility text. */
-					$desc_text  = __( 'Sort descending.' );
+					$desc_text  = __( 'Sort descending.', 'organize-media-folder' );
 					$order_text = 'asc' === $order ? $asc_text : $desc_text;
 				}
 

@@ -4,8 +4,8 @@ Donate link: https://shop.riverforest-wp.info/donate/
 Tags: admin, directories, folders, media, media library
 Requires at least: 4.7
 Requires PHP: 8.0
-Tested up to: 6.7
-Stable tag: 1.35
+Tested up to: 6.8
+Stable tag: 1.36
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,6 +46,9 @@ none
 4. Filter of Insert Media
 
 == Changelog ==
+
+= [1.36] 2025/04/20 =
+* Fix - Loading the management screen.
 
 = [1.35] 2024/03/03 =
 * Fix - Added nonce when sorting.

@@ -19,6 +19,10 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 $organizemediafolderadmin = new OrganizeMediaFolderAdmin();
 
 /** ==================================================
@@ -173,7 +177,7 @@ class OrganizeMediaFolderAdmin {
 	public function manage_page() {
 
 		if ( ! current_user_can( 'upload_files' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'organize-media-folder' ) );
 		}
 
 		$this->options_updated();
@@ -284,7 +288,7 @@ class OrganizeMediaFolderAdmin {
 					<?php
 				}
 				?>
-				<summary style="cursor: pointer; padding: 10px; border: 1px solid #ddd; background: #f4f4f4; color: #000;"><strong><?php esc_html_e( 'Settings' ); ?></strong></summary>
+				<summary style="cursor: pointer; padding: 10px; border: 1px solid #ddd; background: #f4f4f4; color: #000;"><strong><?php esc_html_e( 'Settings', 'organize-media-folder' ); ?></strong></summary>
 				<?php $this->settings_page( $omf_admin_settings ); ?>
 				</details>
 				<hr>
@@ -302,10 +306,10 @@ class OrganizeMediaFolderAdmin {
 					<?php
 					$organize_media_folder_list_table = new TT_OrganizeMediaFolder_List_Table();
 					$organize_media_folder_list_table->prepare_items();
-					submit_button( __( 'Update' ), 'primary', 'organize-media-folder-update1', false, array( 'form' => 'organizemediafolder_forms' ) );
+					submit_button( __( 'Update', 'organize-media-folder' ), 'primary', 'organize-media-folder-update1', false, array( 'form' => 'organizemediafolder_forms' ) );
 					do_action( 'omf_per_page_set', get_current_user_id() );
 					$organize_media_folder_list_table->display();
-					submit_button( __( 'Update' ), 'primary', 'organize-media-folder-update2', false, array( 'form' => 'organizemediafolder_forms' ) );
+					submit_button( __( 'Update', 'organize-media-folder' ), 'primary', 'organize-media-folder-update2', false, array( 'form' => 'organizemediafolder_forms' ) );
 					?>
 				</div>
 				<?php
@@ -380,7 +384,7 @@ class OrganizeMediaFolderAdmin {
 						</div>
 					</details>
 					<details style="margin-bottom: 5px;">
-					<summary style="cursor: pointer; padding: 10px; border: 1px solid #ddd; background: #f4f4f4; color: #000;"><strong><?php esc_html_e( 'Date' ); ?></strong></summary>
+					<summary style="cursor: pointer; padding: 10px; border: 1px solid #ddd; background: #f4f4f4; color: #000;"><strong><?php esc_html_e( 'Date', 'organize-media-folder' ); ?></strong></summary>
 						<div style="display: block;padding: 5px 5px;">
 						<input type="radio" name="dateset" value="new" <?php checked( 'new', $omf_admin_settings['dateset'] ); ?> /><?php esc_html_e( 'Update to use of the current date/time.', 'organize-media-folder' ); ?>
 						</div>
@@ -484,7 +488,7 @@ class OrganizeMediaFolderAdmin {
 						<hr>
 					</details>
 
-					<?php submit_button( __( 'Save Changes' ), 'large', 'organize-media-folder-settings-options-apply', true ); ?>
+					<?php submit_button( __( 'Save Changes', 'organize-media-folder' ), 'large', 'organize-media-folder-settings-options-apply', true ); ?>
 				</div>
 				<?php
 			} else {
@@ -575,7 +579,7 @@ class OrganizeMediaFolderAdmin {
 				}
 			}
 		}
-		$plugin_version = __( 'Version:' ) . ' ' . $plugin_ver_num;
+		$plugin_version = __( 'Version:', 'organize-media-folder' ) . ' ' . $plugin_ver_num;
 		/* translators: FAQ Link & Slug */
 		$faq       = sprintf( __( 'https://wordpress.org/plugins/%s/faq', 'organize-media-folder' ), $slug );
 		$support   = 'https://wordpress.org/support/plugin/' . $slug;
@@ -596,7 +600,7 @@ class OrganizeMediaFolderAdmin {
 		<a style="text-decoration: none;" href="<?php echo esc_url( $translate ); ?>" target="_blank" rel="noopener noreferrer">
 		<?php
 		/* translators: Plugin translation link */
-		echo esc_html( sprintf( __( 'Translations for %s' ), $plugin_name ) );
+		echo esc_html( sprintf( __( 'Translations for %s', 'organize-media-folder' ), $plugin_name ) );
 		?>
 		</a> | <a style="text-decoration: none;" href="<?php echo esc_url( $facebook ); ?>" target="_blank" rel="noopener noreferrer"><span class="dashicons dashicons-facebook"></span></a> | <a style="text-decoration: none;" href="<?php echo esc_url( $twitter ); ?>" target="_blank" rel="noopener noreferrer"><span class="dashicons dashicons-twitter"></span></a> | <a style="text-decoration: none;" href="<?php echo esc_url( $youtube ); ?>" target="_blank" rel="noopener noreferrer"><span class="dashicons dashicons-video-alt3"></span></a>
 		</div>
@@ -605,7 +609,7 @@ class OrganizeMediaFolderAdmin {
 		<div style="width: 250px; height: 180px; margin: 5px; padding: 5px; border: #CCC 2px solid;">
 		<h3><?php esc_html_e( 'Please make a donation if you like my work or would like to further the development of this plugin.', 'organize-media-folder' ); ?></h3>
 		<div style="text-align: right; margin: 5px; padding: 5px;"><span style="padding: 3px; color: #ffffff; background-color: #008000">Plugin Author</span> <span style="font-weight: bold;">Katsushi Kawamori</span></div>
-		<button type="button" style="margin: 5px; padding: 5px;" onclick="window.open('<?php echo esc_url( $donate ); ?>')"><?php esc_html_e( 'Donate to this plugin &#187;' ); ?></button>
+		<button type="button" style="margin: 5px; padding: 5px;" onclick="window.open('<?php echo esc_url( $donate ); ?>')"><?php esc_html_e( 'Donate to this plugin &#187;', 'organize-media-folder' ); ?></button>
 		</div>
 
 		<?php
@@ -632,7 +636,7 @@ class OrganizeMediaFolderAdmin {
 				if ( ! empty( $_POST['per_page'] ) ) {
 					$per_page = absint( $_POST['per_page'] );
 					update_user_option( get_current_user_id(), 'omf_per_page', $per_page );
-					echo '<div class="notice notice-success is-dismissible"><ul><li>' . esc_html( __( 'Settings' ) . ' --> ' . __( 'Changes saved.' ) ) . '</li></ul></div>';
+					echo '<div class="notice notice-success is-dismissible"><ul><li>' . esc_html( __( 'Settings', 'organize-media-folder' ) . ' --> ' . __( 'Changes saved.', 'organize-media-folder' ) ) . '</li></ul></div>';
 				}
 			}
 		}
@@ -707,7 +711,7 @@ class OrganizeMediaFolderAdmin {
 					}
 				}
 				do_action( 'omf_exifcaption_options_updated' );
-				echo '<div class="notice notice-success is-dismissible"><ul><li>' . esc_html( __( 'Settings' ) . ' --> ' . __( 'Changes saved.' ) ) . '</li></ul></div>';
+				echo '<div class="notice notice-success is-dismissible"><ul><li>' . esc_html( __( 'Settings', 'organize-media-folder' ) . ' --> ' . __( 'Changes saved.', 'organize-media-folder' ) ) . '</li></ul></div>';
 			}
 		}
 	}

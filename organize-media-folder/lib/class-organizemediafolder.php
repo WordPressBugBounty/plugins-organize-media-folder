@@ -19,6 +19,10 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 $organizemediafolder = new OrganizeMediaFolder();
 
 /** ==================================================
@@ -421,13 +425,13 @@ class OrganizeMediaFolder {
 			$type_mime[ $type ] = $ext_mimes_csv;
 			switch ( $type ) {
 				case 'image':
-					$type_text[ $type ] = __( 'Image' );
+					$type_text[ $type ] = __( 'Image', 'organize-media-folder' );
 					break;
 				case 'audio':
-					$type_text[ $type ] = __( 'Audio' );
+					$type_text[ $type ] = __( 'Audio', 'organize-media-folder' );
 					break;
 				case 'video':
-					$type_text[ $type ] = __( 'Video' );
+					$type_text[ $type ] = __( 'Video', 'organize-media-folder' );
 					break;
 				case 'document':
 					$type_text[ $type ] = __( 'Document', 'organize-media-folder' );
@@ -439,13 +443,13 @@ class OrganizeMediaFolder {
 					$type_text[ $type ] = __( 'Interactive', 'organize-media-folder' );
 					break;
 				case 'text':
-					$type_text[ $type ] = __( 'Text' );
+					$type_text[ $type ] = __( 'Text', 'organize-media-folder' );
 					break;
 				case 'archive':
 					$type_text[ $type ] = __( 'Archive', 'organize-media-folder' );
 					break;
 				case 'code':
-					$type_text[ $type ] = __( 'Code' );
+					$type_text[ $type ] = __( 'Code', 'organize-media-folder' );
 					break;
 				case 'other':
 					$type_text[ $type ] = __( 'Other', 'organize-media-folder' );
@@ -475,11 +479,11 @@ class OrganizeMediaFolder {
 		}
 		if ( ! $selected_mime_type ) {
 			?>
-			<option value="" selected><?php esc_html_e( 'All media items' ); ?></option>
+			<option value="" selected><?php esc_html_e( 'All media items', 'organize-media-folder' ); ?></option>
 			<?php
 		} else {
 			?>
-			<option value=""><?php esc_html_e( 'All media items' ); ?></option>
+			<option value=""><?php esc_html_e( 'All media items', 'organize-media-folder' ); ?></option>
 			<?php
 		}
 		?>
@@ -524,11 +528,11 @@ class OrganizeMediaFolder {
 			}
 			if ( ! $selected_monthly ) {
 				?>
-				<option value="" selected><?php esc_html_e( 'All dates' ); ?></option>
+				<option value="" selected><?php esc_html_e( 'All dates', 'organize-media-folder' ); ?></option>
 				<?php
 			} else {
 				?>
-				<option value=""><?php esc_html_e( 'All dates' ); ?></option>
+				<option value=""><?php esc_html_e( 'All dates', 'organize-media-folder' ); ?></option>
 				<?php
 			}
 			?>
@@ -579,7 +583,7 @@ class OrganizeMediaFolder {
 		$search_text = get_user_option( 'omf_search_text', $uid );
 		if ( ! $search_text ) {
 			?>
-			<input style="vertical-align: middle;" name="search_text" type="text" value="" placeholder="<?php esc_attr_e( 'Search' ); ?>">
+			<input style="vertical-align: middle;" name="search_text" type="text" value="" placeholder="<?php esc_attr_e( 'Search', 'organize-media-folder' ); ?>">
 			<?php
 		} else {
 			?>
@@ -587,7 +591,7 @@ class OrganizeMediaFolder {
 			<?php
 		}
 
-		submit_button( __( 'Filter' ), 'large', 'organize-media-folder-filter', false );
+		submit_button( __( 'Filter', 'organize-media-folder' ), 'large', 'organize-media-folder-filter', false );
 		?>
 		</form>
 		</div>
@@ -604,7 +608,7 @@ class OrganizeMediaFolder {
 		$omf_admin_settings = get_option( 'omf_admin' );
 
 		$html = '<select name="subdir" style="font-size: small; text-align: left;">';
-		$html .= '<option value="">' . __( 'Select' ) . '</option>';
+		$html .= '<option value="">' . __( 'Select', 'organize-media-folder' ) . '</option>';
 		$html .= apply_filters( 'omf_dir_selectbox', $omf_admin_settings['subdir'] );
 		$html .= '</select>';
 
@@ -646,10 +650,10 @@ class OrganizeMediaFolder {
 		<div style="margin: 0px; text-align: right;">
 		<?php esc_html_e( 'Bulk Folder Select', 'organize-media-folder' ); ?> : 
 		<select name="bulk_folder" style="font-size: small; text-align: left;">
-		<option value=""><?php esc_html_e( 'Select' ); ?></option>
+		<option value=""><?php esc_html_e( 'Select', 'organize-media-folder' ); ?></option>
 		<?php echo wp_kses( apply_filters( 'omf_dir_selectbox', null ), $allowed_html ); ?>
 		</select>
-		<?php submit_button( __( 'Change' ), 'large', 'all_change', false ); ?>
+		<?php submit_button( __( 'Change', 'organize-media-folder' ), 'large', 'all_change', false ); ?>
 		</div>
 		<?php
 	}
@@ -664,8 +668,8 @@ class OrganizeMediaFolder {
 
 		?>
 		<div style="margin: 0px; text-align: right;">
-			<?php esc_html_e( 'Number of items per page:' ); ?><input type="number" step="1" min="1" max="9999" style="width: 80px;" name="per_page" value="<?php echo esc_attr( get_user_option( 'omf_per_page', $uid ) ); ?>" form="organizemediafolder_settings" />
-			<?php submit_button( __( 'Change' ), 'large', 'per_page_change', false, array( 'form' => 'organizemediafolder_settings' ) ); ?>
+			<?php esc_html_e( 'Number of items per page:', 'organize-media-folder' ); ?><input type="number" step="1" min="1" max="9999" style="width: 80px;" name="per_page" value="<?php echo esc_attr( get_user_option( 'omf_per_page', $uid ) ); ?>" form="organizemediafolder_settings" />
+			<?php submit_button( __( 'Change', 'organize-media-folder' ), 'large', 'per_page_change', false, array( 'form' => 'organizemediafolder_settings' ) ); ?>
 		</div>
 		<?php
 	}
@@ -833,7 +837,7 @@ class OrganizeMediaFolder {
 		if ( '' !== $wpdb->last_error ) {
 			$wpdb->print_error();
 			$message['result'] = 'error';
-			$message['error'] = __( 'WordPress database error:' );
+			$message['error'] = __( 'WordPress database error:', 'organize-media-folder' );
 		}
 
 		return $message;

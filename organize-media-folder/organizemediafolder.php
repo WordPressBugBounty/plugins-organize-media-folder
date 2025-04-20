@@ -3,7 +3,7 @@
  * Plugin Name: Organize Media Folder
  * Plugin URI:  https://wordpress.org/plugins/organize-media-folder/
  * Description: Organize Media Library by Folders. URL in the content, replace with the new URL.
- * Version:     1.35
+ * Version:     1.36
  * Author:      Katsushi Kawamori
  * Author URI:  https://riverforest-wp.info/
  * License:     GPLv2 or later
