@@ -4,7 +4,7 @@ Donate link: https://shop.riverforest-wp.info/donate/
 Tags: admin, directories, folders, media, media library
 Requires at least: 4.7
 Requires PHP: 8.0
-Tested up to: 6.8
+Tested up to: 6.9
 Stable tag: 1.36
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
