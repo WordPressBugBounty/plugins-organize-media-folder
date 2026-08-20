@@ -135,9 +135,9 @@ class OrganizeMediaFolderAdmin {
 		if ( $this->is_my_plugin_screen() ) {
 			wp_enqueue_style( 'jquery-datetimepicker', plugin_dir_url( __DIR__ ) . 'css/jquery.datetimepicker.css', array(), '2.3.4' );
 			wp_enqueue_script( 'jquery' );
-			wp_enqueue_script( 'jquery-datetimepicker', plugin_dir_url( __DIR__ ) . 'js/jquery.datetimepicker.js', null, '2.3.4' );
-			wp_enqueue_script( 'jquery-datetimepicker-omf', plugin_dir_url( __DIR__ ) . 'js/jquery.datetimepicker.omf.js', array( 'jquery' ), array(), '1.00', false );
-			wp_enqueue_script( 'organizemediafolder-js', plugin_dir_url( __DIR__ ) . 'js/jquery.organizemediafolder.js', array( 'jquery' ), array(), '1.00', false );
+			wp_enqueue_script( 'jquery-datetimepicker', plugin_dir_url( __DIR__ ) . 'js/jquery.datetimepicker.js', array( 'jquery' ), '2.3.4', true );
+			wp_enqueue_script( 'jquery-datetimepicker-omf', plugin_dir_url( __DIR__ ) . 'js/jquery.datetimepicker.omf.js', array( 'jquery' ), '1.00', true );
+			wp_enqueue_script( 'organizemediafolder-js', plugin_dir_url( __DIR__ ) . 'js/jquery.organizemediafolder.js', array( 'jquery' ), '1.00', true );
 		}
 
 		$handle = 'omf-folder-change-js';
@@ -185,8 +185,8 @@ class OrganizeMediaFolderAdmin {
 		$omf_admin_settings = get_option( 'omf_admin' );
 		$scriptname = admin_url( 'upload.php?page=organizemediafolder' );
 
-		if ( isset( $_POST['organize-media-folder-update1'] ) && ! empty( $_POST['organize-media-folder-update1'] ) ||
-				isset( $_POST['organize-media-folder-update2'] ) && ! empty( $_POST['organize-media-folder-update2'] ) ) {
+		if ( ( isset( $_POST['organize-media-folder-update1'] ) && ! empty( $_POST['organize-media-folder-update1'] ) ) ||
+				( isset( $_POST['organize-media-folder-update2'] ) && ! empty( $_POST['organize-media-folder-update2'] ) ) ) {
 			if ( check_admin_referer( 'omf_update', 'organize_media_folder_update' ) ) {
 				$update_ids = array();
 				if ( ! empty( $_POST['bulk_folder_check'] ) ) {
@@ -297,6 +297,52 @@ class OrganizeMediaFolderAdmin {
 			?>
 			</form>
 			<?php
+			global $wpdb;
+			$attachment_count = (int) $wpdb->get_var(
+				"
+				SELECT COUNT(ID)
+				FROM {$wpdb->posts}
+				WHERE post_type = 'attachment'
+				"
+			);
+			if ( $attachment_count > 25000 && empty( $_GET['omf_force_load'] ) ) {
+				?>
+				<div class="notice notice-warning">
+					<p>
+						<strong>
+							<?php esc_html_e( 'There are too many media items.', 'organize-media-folder' ); ?>
+						</strong>
+					</p>
+					<p>
+						<?php
+						printf(
+							/* translators: %d: number of media items */
+							esc_html__(
+								'There are currently %d media items. Loading this screen may consume a large amount of memory and prevent it from displaying properly.',
+								'organize-media-folder'
+							),
+							esc_html( $attachment_count )
+						)
+						?>
+					</p>
+					<p>
+						<a
+							href="<?php echo esc_url( admin_url( 'upload.php' ) ); ?>"
+							class="button"
+						>
+							<?php esc_html_e( 'Do not load', 'organize-media-folder' ); ?>
+						</a>
+						<a
+							href="<?php echo esc_url( add_query_arg( 'omf_force_load', '1' ) ); ?>"
+							class="button button-primary"
+						>
+							<?php esc_html_e( 'Load anyway', 'organize-media-folder' ); ?>
+						</a>
+					</p>
+				</div>
+				<?php
+				return;
+			}
 			if ( get_user_option( 'omf_filter_term', get_current_user_id() ) ) {
 				?>
 				<div style="margin: 5px; padding: 5px;">

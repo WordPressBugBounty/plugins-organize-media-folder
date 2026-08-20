@@ -4,8 +4,8 @@ Donate link: https://shop.riverforest-wp.info/donate/
 Tags: admin, directories, folders, media, media library
 Requires at least: 4.7
 Requires PHP: 8.0
-Tested up to: 7.0
-Stable tag: 1.36
+Tested up to: 7.1
+Stable tag: 1.37
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,6 +46,9 @@ none
 4. Filter of Insert Media
 
 == Changelog ==
+
+= [1.37] 2026/08/20 =
+* Added - Display a warning when there is too much media while the admin screen is loading.
 
 = [1.36] 2025/04/20 =
 * Fix - Loading the management screen.
