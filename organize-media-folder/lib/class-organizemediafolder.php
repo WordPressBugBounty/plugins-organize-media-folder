@@ -968,7 +968,7 @@ class OrganizeMediaFolder {
 		/* term update */
 		$term = get_term_by( 'name', $folder_name, 'omf_folders' );
 
-		if ( 0 < $term->term_id ) {
+		if ( false !== $term && 0 < $term->term_id ) {
 			$term_taxonomy_ids = wp_set_object_terms( $attach_id, $term->term_id, 'omf_folders' );
 			if ( is_wp_error( $term_taxonomy_ids ) ) {
 				$error = $foldername;

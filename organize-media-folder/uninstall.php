@@ -22,6 +22,7 @@ $termids = $wpdb->get_col(
 /* For Single site */
 if ( ! is_multisite() ) {
 	delete_option( 'omf_admin' );
+	delete_option( 'omf_addon_exifcaption' );
 	$blogusers = get_users( array( 'fields' => array( 'ID' ) ) );
 	foreach ( $blogusers as $user ) {
 		delete_user_option( $user->ID, 'omf_per_page', false );
@@ -49,6 +50,7 @@ if ( ! is_multisite() ) {
 	foreach ( $blog_ids as $blogid ) {
 		switch_to_blog( $blogid );
 		delete_option( 'omf_admin' );
+		delete_option( 'omf_addon_exifcaption' );
 		$blogusers = get_users(
 			array(
 				'blog_id' => $blogid,

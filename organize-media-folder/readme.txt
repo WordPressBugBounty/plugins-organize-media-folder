@@ -5,7 +5,7 @@ Tags: admin, directories, folders, media, media library
 Requires at least: 4.7
 Requires PHP: 8.0
 Tested up to: 7.1
-Stable tag: 1.37
+Stable tag: 2.00
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,6 +25,15 @@ Organize Media Library by Folders. URL in the content, replace with the new URL.
 
 = Logs =
 * Displays the last 100 logs.
+
+= EXIF caption =
+* Sort each Exif data to an arbitrary position and insert it into the caption as text.
+* [Exif](https://developer.wordpress.org/reference/functions/wp_read_image_metadata/)
+* Can extend Exif tags with the following plugin.
+* [Exif Details](https://wordpress.org/plugins/exif-details/)
+
+= EXIF date/time =
+* Can use the Exif shooting date and time, if the media has Exif shooting date and time.
 
 = How it works =
 [youtube https://youtu.be/bIGq09DY47c]
@@ -46,6 +55,9 @@ none
 4. Filter of Insert Media
 
 == Changelog ==
+
+= [2.00] 2026/10/21 =
+* Added - Added Exif-related features.
 
 = [1.37] 2026/08/20 =
 * Added - Display a warning when there is too much media while the admin screen is loading.

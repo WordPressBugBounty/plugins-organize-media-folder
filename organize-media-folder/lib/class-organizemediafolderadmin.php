@@ -52,25 +52,15 @@ class OrganizeMediaFolderAdmin {
 	private $upload_path;
 
 	/** ==================================================
-	 * Add on bool
-	 *
-	 * @var $is_add_on_activate  is_add_on_activate.
-	 */
-	private $is_add_on_activate;
-
-	/** ==================================================
 	 * Construct
 	 *
 	 * @since 1.00
 	 */
 	public function __construct() {
 
-		$this->is_add_on_activate = false;
-		if ( function_exists( 'organize_media_folder_add_on_load_textdomain' ) ) {
-			$this->is_add_on_activate = true;
-		}
-
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
+		add_action( 'admin_init', array( $this, 'check_and_deactivate_old_addon' ) );
+		add_action( 'admin_notices', array( $this, 'display_integrated_addon_notice' ) );
 
 		/* Admin bar folder switch menu */
 		add_action( 'admin_bar_menu', array( $this, 'folder_switch_admin_bar_menu' ), 9999, 1 );
@@ -434,17 +424,7 @@ class OrganizeMediaFolderAdmin {
 						<div style="display: block;padding: 5px 5px;">
 						<input type="radio" name="dateset" value="new" <?php checked( 'new', $omf_admin_settings['dateset'] ); ?> /><?php esc_html_e( 'Update to use of the current date/time.', 'organize-media-folder' ); ?>
 						</div>
-						<?php
-						if ( $this->is_add_on_activate ) {
-							do_action( 'omf_exif_settings', $omf_admin_settings );
-						} else {
-							?>
-							<div style="display: block; padding: 5px 5px;">
-								<input type="radio" disabled="disabled" /><?php esc_html_e( 'Update to use of the exif information date/time.', 'organize-media-folder' ); ?> <span style="color: red;"><?php esc_html_e( 'Add On is required.', 'organize-media-folder' ); ?></span>
-							</div>
-							<?php
-						}
-						?>
+						<?php do_action( 'omf_exif_settings', $omf_admin_settings ); ?>
 						<div style="display: block; padding: 5px 5px;">
 						<input type="radio" name="dateset" value="fixed" <?php checked( 'fixed', $omf_admin_settings['dateset'] ); ?> /><?php esc_html_e( 'Update to use of fixed the date/time.', 'organize-media-folder' ); ?>
 						</div>
@@ -454,52 +434,7 @@ class OrganizeMediaFolderAdmin {
 					</details>
 					<details style="margin-bottom: 5px;">
 					<summary style="cursor: pointer; padding: 10px; border: 1px solid #ddd; background: #f4f4f4; color: #000;"><strong><?php esc_html_e( 'EXIF caption', 'organize-media-folder' ); ?></strong></summary>
-						<?php
-						if ( $this->is_add_on_activate ) {
-							do_action( 'omf_exifcaption_settings' );
-						} else {
-							?>
-							<div style="display: block; padding: 5px 5px;">
-								<span style="color: red;"><?php esc_html_e( 'Add On is required.', 'organize-media-folder' ); ?></span>
-							</div>
-							<?php
-						}
-						?>
-					</details>
-					<details style="margin-bottom: 5px;">
-					<summary style="cursor: pointer; padding: 10px; border: 1px solid #ddd; background: #f4f4f4; color: #000;"><strong><?php esc_html_e( 'Add on', 'organize-media-folder' ); ?></strong></summary>
-					<?php
-					if ( $this->is_add_on_activate ) {
-						do_action( 'omf_addon_license' );
-					} else {
-						$plugin_base_dir = untrailingslashit( wp_normalize_path( plugin_dir_path( __DIR__ ) ) );
-						$slugs = explode( '/', $plugin_base_dir );
-						$slug = end( $slugs );
-						$plugin_dir = untrailingslashit( rtrim( $plugin_base_dir, $slug ) );
-						$add_on_dir = $plugin_dir . '/organize-media-folder-add-on';
-						?>
-						<div style="display: block;padding: 5px 5px;">
-							<h2>Organize Media Folder Add On</h2>
-							<p class="description">
-							<?php esc_html_e( 'This Add-on When registering media by "Organize Media Folder", add EXIF to Media Library caption and EXIF date/time to media.', 'organize-media-folder' ); ?>
-							</p>
-							<div style="display: block;padding: 5px 5px;">
-							<?php
-							if ( is_dir( $add_on_dir ) ) {
-								?>
-								<span style="color: red;"><?php esc_html_e( 'Installed & Deactivated', 'organize-media-folder' ); ?>
-								<?php
-							} else {
-								?>
-								<a href="<?php echo esc_url( __( 'https://shop.riverforest-wp.info/organize-media-folder-add-on/', 'organize-media-folder' ) ); ?>" target="_blank" rel="noopener noreferrer" class="page-title-action"><?php esc_html_e( 'BUY', 'organize-media-folder' ); ?></a>
-								<?php
-							}
-							?>
-							</div>
-						</div>
-						<?php
-					}
-					?>
+						<?php do_action( 'omf_exifcaption_settings' ); ?>
 					</details>
 					<details style="margin-bottom: 5px;">
 					<summary style="cursor: pointer; padding: 10px; border: 1px solid #ddd; background: #f4f4f4; color: #000;"><strong><?php esc_html_e( 'Logs', 'organize-media-folder' ); ?></strong></summary>
@@ -840,6 +775,41 @@ class OrganizeMediaFolderAdmin {
 			}
 		}
 	}
+
+	/** ==================================================
+	 * Detecting and Disabling Legacy Add-ons, and Setting Notification Flags
+	 *
+	 * @since 2.00
+	 */
+	public function check_and_deactivate_old_addon() {
+
+		$addon_plugin_slug = 'organize-media-folder-add-on/organizemediafolderaddon.php';
+
+		if ( ! function_exists( 'deactivate_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		if ( is_plugin_active( $addon_plugin_slug ) ) {
+			deactivate_plugins( $addon_plugin_slug );
+
+			set_transient( 'omf_integrated_addon_deactivated_notice', true, 5 * MINUTE_IN_SECONDS );
+		}
+	}
+
+	/** ==================================================
+	 * Displaying a notification message about add-on deactivation in the admin panel
+	 *
+	 * @since 2.00
+	 */
+	public function display_integrated_addon_notice() {
+
+		if ( get_transient( 'omf_integrated_addon_deactivated_notice' ) ) {
+			?>
+			<div class="notice notice-info is-dismissible">
+				<ul><li><?php echo esc_html_e( 'Since the add-on features have been integrated into the main plugin (Organize Media Folder), we have disabled the add-on (Organize Media Folder Add On). Please remove the no-longer-needed add-on (Organize Media Folder Add On) from your plugin list.', 'organize-media-folder' ); ?></li></ul>
+			</div>
+			<?php
+			delete_transient( 'omf_integrated_addon_deactivated_notice' );
+		}
+	}
 }
-
-
